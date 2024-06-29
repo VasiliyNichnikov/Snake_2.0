@@ -1,18 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
+#nullable enable
+using Snake;
 using UnityEngine;
 
 public class Main : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] 
+    private Camera _camera = null!;
+
+    [SerializeField] 
+    private SnakeController _snakeController = null!;
+
+    [SerializeField] 
+    private SnakePartController _snakePartControllerPrefab = null!;
+    
+    private SnakeGame _game = null!;
+    
+    private void Awake()
     {
-        
+        var context = CreateContext();
+        _game = new SnakeGame(context);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        _game.Start();
+    }
+
+    private void Update()
+    {
+        _game.Update();
+    }
+
+    private GameContext CreateContext()
+    {
+        var context = new GameContext(_camera);
+        context.AddSnake(_snakeController);
+        context.AddSnakePartPrefab(_snakePartControllerPrefab);
+        return context;
     }
 }
