@@ -16,10 +16,10 @@ namespace Factories
             _snakePartParent = snakePartParent;
         }
         
-        public ISnakePartController Create(SnakePartData data)
+        public ISnakePartController Create(SnakePartData data, IChoosingTarget choosingTarget)
         {
             var view = Object.Instantiate(_snakePartPrefab, _snakePartParent, false);
-            view.Init(data);
+            view.Init(data, choosingTarget);
             return view;
         }
     }

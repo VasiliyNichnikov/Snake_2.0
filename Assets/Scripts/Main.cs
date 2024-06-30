@@ -1,9 +1,12 @@
 #nullable enable
+using Levels;
 using Snake;
 using UnityEngine;
 
 public class Main : MonoBehaviour
 {
+    public static Main Instance { get; private set; } = null!;
+
     [SerializeField] 
     private Camera _camera = null!;
 
@@ -12,11 +15,16 @@ public class Main : MonoBehaviour
 
     [SerializeField] 
     private SnakePartController _snakePartControllerPrefab = null!;
+
+    [SerializeField] 
+    private TestLevel? _testLevel;
     
     private SnakeGame _game = null!;
-    
+
     private void Awake()
     {
+        Instance = this;
+        
         var context = CreateContext();
         _game = new SnakeGame(context);
     }
@@ -36,6 +44,10 @@ public class Main : MonoBehaviour
         var context = new GameContext(_camera);
         context.AddSnake(_snakeController);
         context.AddSnakePartPrefab(_snakePartControllerPrefab);
+        if (_testLevel != null)
+        {
+            context.AddTestLevel(_testLevel);
+        }
         return context;
     }
 }
