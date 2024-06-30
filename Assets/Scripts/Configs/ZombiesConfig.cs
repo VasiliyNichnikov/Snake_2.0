@@ -11,7 +11,7 @@ namespace Configs
     public class ZombiesConfig : ScriptableObject
     {
         [Serializable]
-        private struct ZombieData
+        public struct ZombieData
         {
             public string Comment;
 
@@ -57,23 +57,29 @@ namespace Configs
             var result = new List<EnemyData>();
             foreach (var zombie in _zombies)
             {
-                var data = new EnemyData(
-                    zombie.MaxHealth, 
-                    zombie.Damage,
-                    zombie.Recharge,
-                    zombie.MinimumDistanceToAttackPlayer,
-                    zombie.PlayerLayerMask,
-                    zombie.AttackAnimationTime,
-                    
-                    zombie.Speed, 
-                    zombie.AngularSpeed,
-                    zombie.StoppingDistance, 
-                    zombie.Acceleration,
-                    zombie.RecommendedDistanceToPlayer);
+                var data = Convert(zombie);
                 result.Add(data);
             }
 
             return result.AsReadOnly();
+        }
+
+        public static EnemyData Convert(ZombieData zombie)
+        {
+            var data = new EnemyData(
+                zombie.MaxHealth, 
+                zombie.Damage,
+                zombie.Recharge,
+                zombie.MinimumDistanceToAttackPlayer,
+                zombie.PlayerLayerMask,
+                zombie.AttackAnimationTime,
+                    
+                zombie.Speed, 
+                zombie.AngularSpeed,
+                zombie.StoppingDistance, 
+                zombie.Acceleration,
+                zombie.RecommendedDistanceToPlayer);
+            return data;
         }
     }
 }

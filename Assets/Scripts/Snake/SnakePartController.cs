@@ -33,27 +33,46 @@ namespace Snake
         private SnakeAnimatorController _snakeAnimatorController = null!;
         private IChoosingEnemyTarget _choosingEnemyTarget = null!;
         private IChoosingWeapon _choosingWeapon = null!;
-
+        private IChoosingAlly _choosingAlly = null!;
+        
         private IEnemyController? _selectedEnemy;
         private IWeaponController? _weaponController;
+
+        private bool _isInitialized = false;
         
-        public void Init(SnakePartData data, IChoosingEnemyTarget choosingEnemyTarget, IChoosingWeapon choosingWeapon)
+        
+        public void Init(SnakePartData data, 
+            IChoosingEnemyTarget choosingEnemyTarget, 
+            IChoosingWeapon choosingWeapon,
+            IChoosingAlly choosingAlly)
         {
+            if (_isInitialized)
+            {
+                return;
+            }
+            
             _data = data;
 
             _choosingEnemyTarget = choosingEnemyTarget;
             transform.position = data.StartingPosition;
             _snakeAnimatorController = new SnakeAnimatorController(_animator);
             _choosingWeapon = choosingWeapon;
+            _choosingAlly = choosingAlly;
 
             _choosingEnemyTarget.OnSelectedEnemy += OnSelectedEnemy;
             
             InitNavMeshAgent();
             _storage.Init(_snakeAnimatorController);
+            _isInitialized = true;
         }
 
         private void Update()
         {
+            if (!_isInitialized)
+            {
+                return;
+            }
+            
             if (IsDied)
             {
                 return;
@@ -80,6 +99,11 @@ namespace Snake
 
         public void Move(Vector3 position)
         {
+            if (!_isInitialized)
+            {
+                return;
+            }
+            
             if (IsDied)
             {
                 return;
@@ -136,11 +160,22 @@ namespace Snake
 
         private void OnTriggerEnter(Collider other)
         {
+            if (!_isInitialized)
+            {
+                return;
+            }
+            
             TryCollectWeapon(other.gameObject);
+            TryCollectAlly(other.gameObject);
         }
 
         private void OnTriggerStay(Collider other)
         {
+            if (!_isInitialized)
+            {
+                return;
+            }
+            
             TryCollectWeapon(other.gameObject);
         }
 
@@ -159,9 +194,27 @@ namespace Snake
             }
         }
 
+        private void TryCollectAlly(GameObject? gameObj)
+        {
+            if (gameObj == null)
+            {
+                return;
+            }
+            
+            var ally = gameObj.GetComponent<Ally>();
+            if (ally != null)
+            {
+                _choosingAlly.AddPart();
+                ally.PickUp();
+            }
+        }
+
         private void OnDestroy()
         {
-            _choosingEnemyTarget.OnSelectedEnemy -= OnSelectedEnemy;
+            if (_choosingEnemyTarget != null!)
+            {
+                _choosingEnemyTarget.OnSelectedEnemy -= OnSelectedEnemy;
+            }
         }
 
         private void Die(bool needNotification)

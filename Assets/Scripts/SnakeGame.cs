@@ -26,18 +26,34 @@ public class SnakeGame
         _projectilesManager = new ProjectilesManager(projectileData, context.ProjectileParent); 
         
 #if UNITY_EDITOR || DEBUG
+        var enemiesData = _context.ZombiesConfig.GetEnemiesData();
         if (_context.TestLevel != null)
         {
-            var enemiesData = _context.ZombiesConfig.GetEnemiesData();
             _context.TestLevel.Init(enemiesData, _snakeController);
             _levelsManager = new TestLevelsManager(_context.TestLevel);
         }
         else
         {
-            _levelsManager = new LevelsManager();
+            if (_context.ProdLevel is PreparedLevel level)
+            {
+                level.Init(enemiesData, _snakeController);
+                _levelsManager = new PreparedLevelsManager(level);
+            }
+            else
+            {
+                _levelsManager = new LevelsManager();
+            }
         }
 #else
-        _levelsManager = new LevelsManager();
+        if (_context.ProdLevel is PreparedLevel level)
+        {
+            level.Init(enemiesData, _snakeController);
+            _levelsManager = new PreparedLevelsManager(level);
+        }
+        else
+        {
+            _levelsManager = new LevelsManager();
+        }
 #endif
     }
 

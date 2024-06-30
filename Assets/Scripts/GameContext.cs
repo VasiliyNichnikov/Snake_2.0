@@ -14,10 +14,12 @@ public class GameContext
     public TestLevel? TestLevel { get; private set; }
     public Transform ProjectileParent { get; private set; } = null!;
     public ZombiesConfig ZombiesConfig { get; private set; } = null!;
+    public ILevel ProdLevel { get; }
     
-    public GameContext(Camera camera)
+    public GameContext(Camera camera, ILevel prodLevel)
     {
         Camera = camera;
+        ProdLevel = prodLevel;
     }
 
     public GameContext AddSnake(SnakeController snakeController)

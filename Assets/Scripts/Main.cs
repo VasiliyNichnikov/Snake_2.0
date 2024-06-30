@@ -31,6 +31,9 @@ public class Main : MonoBehaviour
 
     [SerializeField] 
     private ZombiesConfig _zombiesConfig = null!;
+
+    [SerializeField] 
+    private PreparedLevel _preparedLevel = null!;
     
     private SnakeGame _game = null!;
 
@@ -54,7 +57,7 @@ public class Main : MonoBehaviour
 
     private GameContext CreateContext()
     {
-        var context = new GameContext(_camera)
+        var context = new GameContext(_camera, _preparedLevel)
                 .AddSnake(_snakeController)
                 .AddSnakePartPrefab(_snakePartControllerPrefab)
                 .AddWeaponConfig(_weaponConfig)

@@ -6,17 +6,19 @@ using Data;
 using Enemies;
 using Factories;
 using Levels;
-using Map;
 using UnityEngine;
 using Weapons;
 
 namespace Snake
 {
-    public class SnakeController : MonoBehaviour, IChoosingEnemyTarget, IChoosingWeapon
+    public class SnakeController : MonoBehaviour, IChoosingEnemyTarget, IChoosingWeapon, IChoosingAlly
     {
         public IReadOnlyCollection<ISnakePartController> Parts => _parts;
         
         public event Action<IEnemyController>? OnSelectedEnemy;
+        public Vector3 StartedPosition => _startedPosition.position;
+
+        public bool IsDied => _parts.Count == 0;
 
         private readonly List<ISnakePartController> _parts = new List<ISnakePartController>();
 
@@ -25,6 +27,11 @@ namespace Snake
         
         [SerializeField]
         private int _maximumAttackDistance;
+
+        [SerializeField] private LayerMask _groundMask;
+
+        [SerializeField] 
+        private Transform _startedPosition = null!;
 
         private Camera _camera = null!;
         private SnakePartFactory _snakePartFactory = null!;
@@ -41,6 +48,9 @@ namespace Snake
             _level = level;
             _weapons = new WeaponsManager(data.WeaponData, data.ProjectilesManager, DistributeWeaponsToEveryone);
             _previewPointPosition = Vector3.zero;
+
+            // Стартовая часть
+            AddPart();
         }
 
         public void UpdateSnake()
@@ -74,13 +84,8 @@ namespace Snake
             }
             
             var ray = _camera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out var hit))
+            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, _groundMask))
             {
-                if (!hit.collider.GetComponent<Ground>())
-                {
-                    return;
-                }
-
                 var distance = Vector3.Distance(_previewPointPosition, hit.point);
                 
                 if (distance <= 0.1f)
@@ -139,9 +144,9 @@ namespace Snake
             }
         }
 
-        private void AddPart()
+        public void AddPart()
         {
-            var startingPosition = _parts.Count != 0 ? _parts[^1].Position : Vector3.zero;
+            var startingPosition = _parts.Count != 0 ? _parts[^1].Position : _startedPosition.position;
             var stoppingDistance = _parts.Count != 0 ? _snakePartConfig.StoppingDistance : 0.0f;
             
             var data = new SnakePartData(
@@ -151,7 +156,7 @@ namespace Snake
                 stoppingDistance,
                 _snakePartConfig.Acceleration);
 
-            var part = _snakePartFactory.Create(data, this, this);
+            var part = _snakePartFactory.Create(data, this, this, this);
             part.OnDied += OnDiedPart;
             _parts.Add(part);
 
