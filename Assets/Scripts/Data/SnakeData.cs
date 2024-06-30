@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using Factories;
+using Projectiles;
 using UnityEngine;
 
 namespace Data
@@ -9,12 +10,18 @@ namespace Data
         public readonly Camera Camera;
         public readonly SnakePartFactory SnakePartFactory;
         public readonly WeaponData WeaponData;
+        public readonly ProjectilesManager ProjectilesManager;
 
-        public SnakeData(Camera camera, SnakePartFactory snakePartFactory, WeaponData weaponData)
+        public SnakeData(
+            Camera camera, 
+            SnakePartFactory snakePartFactory, 
+            WeaponData weaponData, 
+            ProjectilesManager projectilesManager)
         {
             Camera = camera;
             SnakePartFactory = snakePartFactory;
             WeaponData = weaponData;
+            ProjectilesManager = projectilesManager;
         }
     }
 }

@@ -4,17 +4,23 @@ using Weapons;
 
 namespace Snake
 {
-    public class SnakeAnimatorController
+    public class SnakeAnimatorController : IWeaponAnimator
     {
         private static readonly int StaticB = Animator.StringToHash("Static_b");
         private static readonly int StaticF = Animator.StringToHash("Speed_f");
         private static readonly int WeaponType = Animator.StringToHash("WeaponType_int");
+        private static readonly int SingleShoot = Animator.StringToHash("Shoot_b");
         
         private readonly Animator _animator;
 
         public SnakeAnimatorController(Animator animator)
         {
             _animator = animator;
+        }
+
+        public void PlaySingleShoot()
+        {
+            _animator.SetBool(SingleShoot, true);
         }
 
         public void Idle()

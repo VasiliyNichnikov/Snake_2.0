@@ -10,7 +10,9 @@ public class GameContext
     public SnakeController SnakeController { get; private set; } = null!;
     public SnakePartController SnakePartControllerPrefab { get; private set; } = null!;
     public WeaponConfig WeaponConfig { get; private set; } = null!;
+    public ProjectileConfig ProjectileConfig { get; private set; } = null!;
     public TestLevel? TestLevel { get; private set; }
+    public Transform ProjectileParent { get; private set; }
     
     public GameContext(Camera camera)
     {
@@ -38,6 +40,18 @@ public class GameContext
     public GameContext AddTestLevel(TestLevel testLevel)
     {
         TestLevel = testLevel;
+        return this;
+    }
+
+    public GameContext AddProjectileConfig(ProjectileConfig projectileConfig)
+    {
+        ProjectileConfig = projectileConfig;
+        return this;
+    }
+
+    public GameContext AddProjectileParent(Transform projectileParent)
+    {
+        ProjectileParent = projectileParent;
         return this;
     }
 }

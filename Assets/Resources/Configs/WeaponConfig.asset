@@ -15,7 +15,7 @@ MonoBehaviour:
   Weapons:
   - Comment: "\u041F\u0438\u0441\u0442\u043E\u043B\u0435\u0442"
     Type: 0
-    RateOfFire: 0.5
+    RateOfFire: 0.25
     RechargeTime: 2
     NumberOfProjectiles: 10
   - Comment: "\u041A\u0430\u043B\u0430\u0448"

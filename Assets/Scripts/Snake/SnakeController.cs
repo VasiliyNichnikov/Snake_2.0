@@ -33,7 +33,7 @@ namespace Snake
             _snakePartFactory = data.SnakePartFactory;
             _camera = data.Camera;
             _level = level;
-            _weapons = new WeaponsManager(data.WeaponData, DistributeWeaponsToEveryone);
+            _weapons = new WeaponsManager(data.WeaponData, data.ProjectilesManager, DistributeWeaponsToEveryone);
             _previewPointPosition = Vector3.zero;
         }
 
@@ -53,6 +53,7 @@ namespace Snake
 
             FoundEnemy();
             Move();
+            TryShoot();
         }
 
         private void Move()
@@ -113,7 +114,19 @@ namespace Snake
 
             if (_weapons.SelectedWeapon != null)
             {
-                part.ChooseWeapon(_weapons.SelectedWeapon);
+                part.ChooseWeapon(_weapons.SelectedWeapon.Clone());
+            }
+        }
+
+        private void TryShoot()
+        {
+            const int leftMouseButtonDown = 0;
+            if (Input.GetMouseButtonDown(leftMouseButtonDown) || Input.GetMouseButton(leftMouseButtonDown))
+            {
+                foreach (var part in _parts)
+                {
+                    part.TryShoot();
+                }
             }
         }
 
@@ -121,7 +134,7 @@ namespace Snake
         {
             foreach (var part in _parts)
             {
-                part.ChooseWeapon(weaponController);
+                part.ChooseWeapon(weaponController.Clone());
             }
         }
     }

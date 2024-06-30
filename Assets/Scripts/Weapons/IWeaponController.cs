@@ -2,6 +2,12 @@
 {
     public interface IWeaponController
     {
-        void Apply(IWeaponVisitor visitor);
+        void Shoot();
+
+        void Update();
+        
+        void Apply(IWeaponVisitor visitor, IWeaponAnimator animator);
+
+        IWeaponController Clone();
     }
 }

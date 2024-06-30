@@ -7,16 +7,14 @@ namespace Weapons
     {
         public bool InHand => _inHand;
         public WeaponType Type => _type;
-        
-        [SerializeField] 
-        private Transform[] _pointsForProjectileDeparture = null!;
-        
-        [SerializeField]
-        private WeaponType _type;
 
-        [SerializeField, Header("Костыль, обязательно, если оружие на руках юнита")] 
+        [SerializeField] private Transform[] _pointsForProjectileDeparture = null!;
+
+        [SerializeField] private WeaponType _type;
+
+        [SerializeField, Header("Костыль, обязательно, если оружие на руках юнита")]
         private bool _inHand;
-        
+
         public void Show()
         {
             gameObject.SetActive(true);
@@ -35,6 +33,24 @@ namespace Weapons
         {
             Hide();
             Destroy(gameObject);
+        }
+
+        public Transform GetRandomPoint()
+        {
+            if (_pointsForProjectileDeparture == null! || _pointsForProjectileDeparture.Length == 0)
+            {
+                Debug.LogError("WeaponView.GetRandomPoint: number points is null.");
+                return transform;
+            }
+
+            if (_pointsForProjectileDeparture.Length == 1)
+            {
+                return _pointsForProjectileDeparture[0];
+            }
+
+            var randomIndex = Random.Range(0, _pointsForProjectileDeparture.Length - 1);
+            var point = _pointsForProjectileDeparture[randomIndex];
+            return point;
         }
     }
 }

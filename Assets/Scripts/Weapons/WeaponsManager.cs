@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using Data;
+using Projectiles;
+using Snake;
 using Random = UnityEngine.Random;
 
 namespace Weapons
@@ -12,11 +14,13 @@ namespace Weapons
         
         private readonly WeaponData _data;
         private readonly Action<IWeaponController> _chooseWeapon;
+        private readonly ProjectilesManager _projectilesManager;
         
-        public WeaponsManager(WeaponData data, Action<IWeaponController> chooseWeapon)
+        public WeaponsManager(WeaponData data, ProjectilesManager projectilesManager, Action<IWeaponController> chooseWeapon)
         {
             _data = data;
             _chooseWeapon = chooseWeapon;
+            _projectilesManager = projectilesManager;
         }
 
         public void ChooseWeapon(WeaponType type)
@@ -44,19 +48,19 @@ namespace Weapons
             _chooseWeapon.Invoke(selectedController);
         }
 
-        private static IWeaponController CreateDesertEagleWeapon(WeaponDesertEagleData data)
+        private IWeaponController CreateDesertEagleWeapon(WeaponDesertEagleData data)
         {
-            return new WeaponDesertEagleController(data);
+            return new WeaponDesertEagleController(data, _projectilesManager);
         }
 
-        private static IWeaponController CreateKalashWeapon(WeaponKalashData data)
+        private IWeaponController CreateKalashWeapon(WeaponKalashData data)
         {
-            return new WeaponKalashController(data);
+            return new WeaponKalashController(data, _projectilesManager);
         }
 
-        private static IWeaponController CreateMiniGunWeapon(WeaponMiniGunData data)
+        private IWeaponController CreateMiniGunWeapon(WeaponMiniGunData data)
         {
-            return new WeaponMiniGunController(data);
+            return new WeaponMiniGunController(data, _projectilesManager);
         }
 
         private static T RandomData<T>(IReadOnlyList<T> collection) where T : struct

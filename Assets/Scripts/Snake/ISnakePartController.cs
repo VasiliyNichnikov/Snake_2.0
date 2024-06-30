@@ -10,5 +10,7 @@ namespace Snake
         void Move(Vector3 position);
 
         void ChooseWeapon(IWeaponController controller);
+
+        void TryShoot();
     }
 }

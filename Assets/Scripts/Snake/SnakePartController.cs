@@ -29,6 +29,7 @@ namespace Snake
         private IChoosingWeapon _choosingWeapon = null!;
 
         private IEnemyController? _selectedEnemy;
+        private IWeaponController? _weaponController;
         
         public void Init(SnakePartData data, IChoosingEnemyTarget choosingEnemyTarget, IChoosingWeapon choosingWeapon)
         {
@@ -61,6 +62,8 @@ namespace Snake
             {
                 transform.LookAt(_selectedEnemy.Target, Vector3.up);
             }
+
+            _weaponController?.Update();
         }
 
         public void Move(Vector3 position)
@@ -88,7 +91,13 @@ namespace Snake
 
         public void ChooseWeapon(IWeaponController controller)
         {
-            controller.Apply(_storage);
+            _weaponController = controller;
+            controller.Apply(_storage, _snakeAnimatorController);
+        }
+
+        public void TryShoot()
+        {
+            _weaponController?.Shoot();
         }
 
         private void OnTriggerEnter(Collider other)

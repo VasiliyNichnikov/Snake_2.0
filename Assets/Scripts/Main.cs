@@ -22,6 +22,12 @@ public class Main : MonoBehaviour
 
     [SerializeField] 
     private WeaponConfig _weaponConfig = null!;
+
+    [SerializeField] 
+    private ProjectileConfig _projectileConfig = null!;
+
+    [SerializeField] 
+    private Transform _projectileParent = null!;
     
     private SnakeGame _game = null!;
 
@@ -49,6 +55,8 @@ public class Main : MonoBehaviour
                 .AddSnake(_snakeController)
                 .AddSnakePartPrefab(_snakePartControllerPrefab)
                 .AddWeaponConfig(_weaponConfig)
+                .AddProjectileConfig(_projectileConfig)
+                .AddProjectileParent(_projectileParent)
             ;
         if (_testLevel != null)
         {
