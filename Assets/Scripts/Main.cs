@@ -2,6 +2,7 @@
 using Configs;
 using Levels;
 using Snake;
+using UI;
 using UnityEngine;
 
 public class Main : MonoBehaviour
@@ -34,6 +35,9 @@ public class Main : MonoBehaviour
 
     [SerializeField] 
     private PreparedLevel _preparedLevel = null!;
+
+    [SerializeField] 
+    private StartGamePanel _startGamePanel = null!;
     
     private SnakeGame _game = null!;
 
@@ -57,7 +61,7 @@ public class Main : MonoBehaviour
 
     private GameContext CreateContext()
     {
-        var context = new GameContext(_camera, _preparedLevel)
+        var context = new GameContext(_camera, _preparedLevel, _startGamePanel)
                 .AddSnake(_snakeController)
                 .AddSnakePartPrefab(_snakePartControllerPrefab)
                 .AddWeaponConfig(_weaponConfig)

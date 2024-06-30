@@ -4,11 +4,13 @@ using Factories;
 using Levels;
 using Projectiles;
 using Snake;
+using UI;
 
 public class SnakeGame
 {
     private readonly GameContext _context;
-
+    private readonly StartGamePanel _startGamePanel;
+    
     #region Controllers
 
     private readonly SnakeController _snakeController;
@@ -23,7 +25,8 @@ public class SnakeGame
         _context = context;
         _snakeController = context.SnakeController;
         var projectileData = context.ProjectileConfig.GetData();
-        _projectilesManager = new ProjectilesManager(projectileData, context.ProjectileParent); 
+        _projectilesManager = new ProjectilesManager(projectileData, context.ProjectileParent);
+        _startGamePanel = context.StartGamePanel;
         
 #if UNITY_EDITOR || DEBUG
         var enemiesData = _context.ZombiesConfig.GetEnemiesData();
@@ -45,6 +48,7 @@ public class SnakeGame
             }
         }
 #else
+        var enemiesData = _context.ZombiesConfig.GetEnemiesData();
         if (_context.ProdLevel is PreparedLevel level)
         {
             level.Init(enemiesData, _snakeController);
@@ -59,13 +63,16 @@ public class SnakeGame
 
     public void Start()
     {
-        var weaponData = _context.WeaponConfig.GetData();
-        var snakePartFactory = new SnakePartFactory(_context.SnakePartControllerPrefab, _snakeController.transform);
-        var data = new SnakeData(_context.Camera, 
-            snakePartFactory, 
-            weaponData, 
-            _projectilesManager);
-        _snakeController.Init(data, _levelsManager.GetCurrentLevel());
+        _startGamePanel.Init(() =>
+        {
+            var weaponData = _context.WeaponConfig.GetData();
+            var snakePartFactory = new SnakePartFactory(_context.SnakePartControllerPrefab, _snakeController.transform);
+            var data = new SnakeData(_context.Camera, 
+                snakePartFactory, 
+                weaponData, 
+                _projectilesManager);
+            _snakeController.Init(data, _levelsManager.GetCurrentLevel());
+        });
     }
 
     public void Update()

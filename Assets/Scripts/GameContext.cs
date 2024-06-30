@@ -2,6 +2,7 @@
 using Configs;
 using Levels;
 using Snake;
+using UI;
 using UnityEngine;
 
 public class GameContext
@@ -15,11 +16,13 @@ public class GameContext
     public Transform ProjectileParent { get; private set; } = null!;
     public ZombiesConfig ZombiesConfig { get; private set; } = null!;
     public ILevel ProdLevel { get; }
+    public StartGamePanel StartGamePanel { get; }
     
-    public GameContext(Camera camera, ILevel prodLevel)
+    public GameContext(Camera camera, ILevel prodLevel, StartGamePanel startGamePanel)
     {
         Camera = camera;
         ProdLevel = prodLevel;
+        StartGamePanel = startGamePanel;
     }
 
     public GameContext AddSnake(SnakeController snakeController)
