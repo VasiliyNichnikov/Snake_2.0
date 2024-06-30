@@ -213,6 +213,7 @@ Transform:
   - {fileID: 1049889750011303812}
   - {fileID: 802474086018259678}
   - {fileID: 5071888034690580659}
+  - {fileID: 7993069492511746683}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 92.201, z: 90.002}
@@ -284,6 +285,7 @@ MonoBehaviour:
   - {fileID: 802474086018259678}
   - {fileID: 5071888034690580659}
   _type: 9
+  _muzzle: {fileID: 7993069492511746683}
   _inHand: 0
 --- !u!65 &8866093640926263479
 BoxCollider:
@@ -298,6 +300,37 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8353451, y: 1.7143312, z: 2.9023933}
   m_Center: {x: -0.00000011920943, y: -0.04162437, z: 0.5418573}
+--- !u!1 &8051680596664840605
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7993069492511746683}
+  m_Layer: 0
+  m_Name: Muzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7993069492511746683
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8051680596664840605}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.07, y: 0, z: 1.777}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7227861198221536057}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9051863569305332212
 GameObject:
   m_ObjectHideFlags: 0

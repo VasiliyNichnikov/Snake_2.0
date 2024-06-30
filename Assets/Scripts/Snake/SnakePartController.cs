@@ -2,7 +2,6 @@
 using System;
 using Data;
 using Enemies;
-using Entities;
 using UnityEngine;
 using UnityEngine.AI;
 using Weapons;
@@ -12,7 +11,7 @@ namespace Snake
     /// <summary>
     /// Кусок змеи
     /// </summary>
-    public class SnakePartController : MonoBehaviour, ISnakePartController, IEntityHealth
+    public class SnakePartController : MonoBehaviour, ISnakePartController
     {
         public bool IsDied { get; private set; }
         
@@ -69,12 +68,8 @@ namespace Snake
             {
                 _snakeAnimatorController.Walk(_agent.speed);
             }
-            
-            if (_selectedEnemy != null)
-            {
-                transform.LookAt(_selectedEnemy.Target, Vector3.up);
-            }
 
+            TryRotateToEnemy();
             _weaponController?.Update();
         }
         
@@ -183,6 +178,24 @@ namespace Snake
             {
                 OnDied?.Invoke();
             }
+        }
+        
+        private void TryRotateToEnemy()
+        {
+            if (_selectedEnemy == null)
+            {
+                return;
+            }
+
+            var weaponView = _storage.WeaponMuzzleTransform;
+            if (weaponView == null)
+            {
+                transform.LookAt(_selectedEnemy.Target, Vector3.up);
+                return;
+            }
+            
+            // TODO: лютый пиздец, но решает проблему с поваротами
+            weaponView.LookAt(_selectedEnemy.Target, Vector3.up);
         }
     }
 }

@@ -10,11 +10,24 @@ namespace Weapons
     {
         [SerializeField] 
         private WeaponView[] _weapons = null!;
-
+        
         private SnakeAnimatorController _animatorController = null!;
         
         private WeaponView? _selectedWeapon;
 
+        public Transform? WeaponMuzzleTransform
+        {
+            get
+            {
+                if (_selectedWeapon == null)
+                {
+                    return null;
+                }
+
+                return _selectedWeapon.transform;
+            }
+        } 
+        
         public void Init(SnakeAnimatorController animatorController)
         {
             HideAllWeapons();
@@ -49,6 +62,7 @@ namespace Weapons
             var weapon = _weapons.First(w => w.Type == type);
             weapon.Show();
             _animatorController.SetWeapon(type);
+            _selectedWeapon = weapon;
             return weapon;
         }
         

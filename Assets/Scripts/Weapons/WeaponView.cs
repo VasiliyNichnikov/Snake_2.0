@@ -8,9 +8,13 @@ namespace Weapons
         public bool InHand => _inHand;
         public WeaponType Type => _type;
 
+        public Transform Muzzle => _muzzle;
+        
         [SerializeField] private Transform[] _pointsForProjectileDeparture = null!;
 
         [SerializeField] private WeaponType _type;
+
+        [SerializeField] private Transform _muzzle = null!;
 
         [SerializeField, Header("Костыль, обязательно, если оружие на руках юнита")]
         private bool _inHand;
