@@ -170,7 +170,8 @@ namespace Snake
             {
                 return;
             }
-            
+
+            _agent.enabled = false;
             IsDied = true;
             _snakeAnimatorController.Die();
 

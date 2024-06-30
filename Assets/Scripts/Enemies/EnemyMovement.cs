@@ -26,15 +26,20 @@ namespace Enemies
         
         private Vector3? _pointForMovement;
 
-        private Transform? _selectedPlayerPart;
+        private ISnakePartController? _selectedPlayerPart;
         
-        private Transform? SelectedPlayerPart
+        private ISnakePartController? SelectedPlayerPart
         {
             get
             {
+                if (_selectedPlayerPart is { IsDied: true })
+                {
+                    _selectedPlayerPart = null;
+                }
+                
                 if (_selectedPlayerPart != null)
                 {
-                    var distance = Vector3.Distance(_enemyTransform.position, _selectedPlayerPart.position);
+                    var distance = Vector3.Distance(_enemyTransform.position, _selectedPlayerPart.Position);
                     if (distance <= _recommendedDistanceToPlayer)
                     {
                         return _selectedPlayerPart;
@@ -44,7 +49,7 @@ namespace Enemies
                 if (_player.Parts.Count != 0)
                 {
                     var minDistance = Mathf.Infinity;
-                    Transform? selectedPlayerPart = null;
+                    ISnakePartController? selectedPlayerPart = null;
                     foreach (var part in _player.Parts.Where(p => !p.IsDied))
                     {
                         var distance = Vector3.Distance(part.Position, _enemyTransform.position);
@@ -52,7 +57,7 @@ namespace Enemies
                         if (distance < minDistance)
                         {
                             minDistance = distance;
-                            selectedPlayerPart = part.Transform;
+                            selectedPlayerPart = part;
                         }
                     }
 
@@ -101,7 +106,7 @@ namespace Enemies
                 return Mathf.Infinity;
             }
             
-            return Vector3.Distance(_enemyTransform.position, selectedPlayerPart.position);
+            return Vector3.Distance(_enemyTransform.position, selectedPlayerPart.Position);
         }
         
         public void ResetPlayerPart()
@@ -132,7 +137,7 @@ namespace Enemies
                 return;
             }
             
-            var distance = Vector3.Distance(selectedPart.position, _enemyTransform.position);
+            var distance = Vector3.Distance(selectedPart.Position, _enemyTransform.position);
             if (distance <= _agent.stoppingDistance || _agent.isStopped)
             {
                 _animator.Idle();
@@ -140,7 +145,7 @@ namespace Enemies
             }
             
             _animator.Walk(_agent.speed);
-            _pointForMovement = selectedPart.position;
+            _pointForMovement = selectedPart.Position;
             _agent.SetDestination(_pointForMovement.Value);
         }
         
@@ -152,7 +157,7 @@ namespace Enemies
                 return;
             }
             
-            var direction = selectedPlayerPart.position - _enemyTransform.position;
+            var direction = selectedPlayerPart.Position - _enemyTransform.position;
             var rotation = Vector3.RotateTowards(_enemyTransform.forward, direction, 360, 1f);
             _enemyTransform.rotation = Quaternion.LookRotation(rotation);
         }
