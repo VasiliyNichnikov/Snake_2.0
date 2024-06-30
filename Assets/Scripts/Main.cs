@@ -1,4 +1,5 @@
 #nullable enable
+using Configs;
 using Levels;
 using Snake;
 using UnityEngine;
@@ -18,6 +19,9 @@ public class Main : MonoBehaviour
 
     [SerializeField] 
     private TestLevel? _testLevel;
+
+    [SerializeField] 
+    private WeaponConfig _weaponConfig = null!;
     
     private SnakeGame _game = null!;
 
@@ -41,9 +45,11 @@ public class Main : MonoBehaviour
 
     private GameContext CreateContext()
     {
-        var context = new GameContext(_camera);
-        context.AddSnake(_snakeController);
-        context.AddSnakePartPrefab(_snakePartControllerPrefab);
+        var context = new GameContext(_camera)
+                .AddSnake(_snakeController)
+                .AddSnakePartPrefab(_snakePartControllerPrefab)
+                .AddWeaponConfig(_weaponConfig)
+            ;
         if (_testLevel != null)
         {
             context.AddTestLevel(_testLevel);

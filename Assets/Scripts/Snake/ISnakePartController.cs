@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Weapons;
 
 namespace Snake
 {
@@ -7,5 +8,7 @@ namespace Snake
         Vector3 Position { get; }
         
         void Move(Vector3 position);
+
+        void ChooseWeapon(IWeaponController controller);
     }
 }

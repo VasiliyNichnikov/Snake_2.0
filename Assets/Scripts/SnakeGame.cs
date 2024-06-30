@@ -37,8 +37,9 @@ public class SnakeGame
 
     public void Start()
     {
+        var weaponData = _context.WeaponConfig.GetData();
         var snakePartFactory = new SnakePartFactory(_context.SnakePartControllerPrefab, _snakeController.transform);
-        var data = new SnakeData(_context.Camera, snakePartFactory);
+        var data = new SnakeData(_context.Camera, snakePartFactory, weaponData);
         _snakeController.Init(data, _levelsManager.GetCurrentLevel());
     }
 

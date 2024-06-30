@@ -8,10 +8,11 @@ using Factories;
 using Levels;
 using Map;
 using UnityEngine;
+using Weapons;
 
 namespace Snake
 {
-    public class SnakeController : MonoBehaviour, IChoosingTarget
+    public class SnakeController : MonoBehaviour, IChoosingEnemyTarget, IChoosingWeapon
     {
         public event Action<IEnemyController>? OnSelectedEnemy;
         
@@ -21,7 +22,9 @@ namespace Snake
         private Camera _camera = null!;
         private SnakePartFactory _snakePartFactory = null!;
         private ILevel _level = null!;
-        
+        private WeaponsManager _weapons = null!;
+
+        private Vector3 _previewPointPosition;
 
         private readonly List<ISnakePartController> _parts = new List<ISnakePartController>();
 
@@ -30,6 +33,8 @@ namespace Snake
             _snakePartFactory = data.SnakePartFactory;
             _camera = data.Camera;
             _level = level;
+            _weapons = new WeaponsManager(data.WeaponData, DistributeWeaponsToEveryone);
+            _previewPointPosition = Vector3.zero;
         }
 
         public void UpdateSnake()
@@ -52,6 +57,15 @@ namespace Snake
 
         private void Move()
         {
+            if (_parts.Count > 1)
+            {
+                for (var i = 1; i < _parts.Count; i++)
+                {
+                    var previewSnakePart = _parts[i - 1];
+                    _parts[i].Move(previewSnakePart.Position);
+                }
+            }
+            
             var ray = _camera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit))
             {
@@ -60,21 +74,19 @@ namespace Snake
                     return;
                 }
 
-                for (var i = 0; i < _parts.Count; i++)
+                var distance = Vector3.Distance(_previewPointPosition, hit.point);
+                
+                if (distance <= 0.1f)
                 {
-                    var snakePart = _parts[i];
-                    if (i == 0)
-                    {
-                        snakePart.Move(hit.point);
-                        continue;
-                    }
-
-                    var previewSnakePart = _parts[i - 1];
-                    snakePart.Move(previewSnakePart.Position);
+                    return;
                 }
+                _previewPointPosition = hit.point;
+                _parts[0].Move(hit.point);
             }
         }
 
+        public void ChooseWeapon(WeaponType type) => _weapons.ChooseWeapon(type);
+        
         private void FoundEnemy()
         {
             // TODO: дописать: нужно выбрать врага
@@ -96,8 +108,21 @@ namespace Snake
                 stoppingDistance,
                 _snakePartConfig.Acceleration);
 
-            var part = _snakePartFactory.Create(data, this);
+            var part = _snakePartFactory.Create(data, this, this);
             _parts.Add(part);
+
+            if (_weapons.SelectedWeapon != null)
+            {
+                part.ChooseWeapon(_weapons.SelectedWeapon);
+            }
+        }
+
+        private void DistributeWeaponsToEveryone(IWeaponController weaponController)
+        {
+            foreach (var part in _parts)
+            {
+                part.ChooseWeapon(weaponController);
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using Data;
 using Snake;
 using UnityEngine;
+using Weapons;
 
 namespace Factories
 {
@@ -16,10 +17,10 @@ namespace Factories
             _snakePartParent = snakePartParent;
         }
         
-        public ISnakePartController Create(SnakePartData data, IChoosingTarget choosingTarget)
+        public ISnakePartController Create(SnakePartData data, IChoosingEnemyTarget choosingEnemyTarget, IChoosingWeapon choosingWeapon)
         {
-            var view = Object.Instantiate(_snakePartPrefab, _snakePartParent, false);
-            view.Init(data, choosingTarget);
+            var view = Object.Instantiate(_snakePartPrefab, _snakePartParent , false);
+            view.Init(data, choosingEnemyTarget, choosingWeapon);
             return view;
         }
     }

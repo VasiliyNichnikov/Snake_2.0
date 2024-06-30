@@ -4,7 +4,7 @@ using Enemies;
 
 namespace Snake
 {
-    public interface IChoosingTarget
+    public interface IChoosingEnemyTarget
     {
         event Action<IEnemyController> OnSelectedEnemy;
     }

@@ -8,11 +8,13 @@ namespace Data
     {
         public readonly Camera Camera;
         public readonly SnakePartFactory SnakePartFactory;
+        public readonly WeaponData WeaponData;
 
-        public SnakeData(Camera camera, SnakePartFactory snakePartFactory)
+        public SnakeData(Camera camera, SnakePartFactory snakePartFactory, WeaponData weaponData)
         {
             Camera = camera;
             SnakePartFactory = snakePartFactory;
+            WeaponData = weaponData;
         }
     }
 }
