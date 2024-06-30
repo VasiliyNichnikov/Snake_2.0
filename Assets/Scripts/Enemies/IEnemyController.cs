@@ -6,5 +6,7 @@ namespace Enemies
     public interface IEnemyController
     {
         Transform Target { get; }
+        
+        EnemyMovement Movement { get; }
     }
 }

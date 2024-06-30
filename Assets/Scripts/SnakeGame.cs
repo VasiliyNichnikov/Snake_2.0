@@ -28,6 +28,8 @@ public class SnakeGame
 #if UNITY_EDITOR || DEBUG
         if (_context.TestLevel != null)
         {
+            var enemiesData = _context.ZombiesConfig.GetEnemiesData();
+            _context.TestLevel.Init(enemiesData, _snakeController);
             _levelsManager = new TestLevelsManager(_context.TestLevel);
         }
         else
@@ -43,7 +45,10 @@ public class SnakeGame
     {
         var weaponData = _context.WeaponConfig.GetData();
         var snakePartFactory = new SnakePartFactory(_context.SnakePartControllerPrefab, _snakeController.transform);
-        var data = new SnakeData(_context.Camera, snakePartFactory, weaponData, _projectilesManager);
+        var data = new SnakeData(_context.Camera, 
+            snakePartFactory, 
+            weaponData, 
+            _projectilesManager);
         _snakeController.Init(data, _levelsManager.GetCurrentLevel());
     }
 

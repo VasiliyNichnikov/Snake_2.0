@@ -6,6 +6,6 @@ namespace Levels
 {
     public interface ILevel
     {
-        IReadOnlyCollection<IEnemyController> Enemies { get; }
+        IReadOnlyCollection<IEnemyController> LivingEnemies { get; }
     }
 }

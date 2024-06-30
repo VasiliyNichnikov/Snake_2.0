@@ -9,6 +9,7 @@ namespace Projectiles
     public class DefaultProjectile : MonoBehaviour, IProjectile
     {
         public ProjectileType Type => _data.Type;
+        public int Damage => _data.Damage;
 
         private IProjectileController _controller = null!;
         private DefaultProjectileData _data;

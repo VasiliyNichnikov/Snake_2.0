@@ -28,6 +28,9 @@ public class Main : MonoBehaviour
 
     [SerializeField] 
     private Transform _projectileParent = null!;
+
+    [SerializeField] 
+    private ZombiesConfig _zombiesConfig = null!;
     
     private SnakeGame _game = null!;
 
@@ -57,6 +60,7 @@ public class Main : MonoBehaviour
                 .AddWeaponConfig(_weaponConfig)
                 .AddProjectileConfig(_projectileConfig)
                 .AddProjectileParent(_projectileParent)
+                .AddZombieConfig(_zombiesConfig)
             ;
         if (_testLevel != null)
         {

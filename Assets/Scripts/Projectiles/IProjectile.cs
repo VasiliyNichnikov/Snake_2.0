@@ -8,6 +8,8 @@ namespace Projectiles
     public interface IProjectile : IPoolObject
     {
         ProjectileType Type { get; }
+        
+        int Damage { get; }
 
         void Init(IProjectileController controller);
         

@@ -14,19 +14,25 @@ namespace Snake
 {
     public class SnakeController : MonoBehaviour, IChoosingEnemyTarget, IChoosingWeapon
     {
-        public event Action<IEnemyController>? OnSelectedEnemy;
+        public IReadOnlyCollection<ISnakePartController> Parts => _parts;
         
+        public event Action<IEnemyController>? OnSelectedEnemy;
+
+        private readonly List<ISnakePartController> _parts = new List<ISnakePartController>();
+
         [SerializeField] 
         private SnakePartConfig _snakePartConfig = null!;
         
+        [SerializeField]
+        private int _maximumAttackDistance;
+
         private Camera _camera = null!;
         private SnakePartFactory _snakePartFactory = null!;
         private ILevel _level = null!;
         private WeaponsManager _weapons = null!;
-
         private Vector3 _previewPointPosition;
 
-        private readonly List<ISnakePartController> _parts = new List<ISnakePartController>();
+        private IEnemyController? _selectedEnemy;
 
         public void Init(SnakeData data, ILevel level)
         {
@@ -90,10 +96,46 @@ namespace Snake
         
         private void FoundEnemy()
         {
-            // TODO: дописать: нужно выбрать врага
-            foreach (var enemy in _level.Enemies)
+            if (_parts.Count == 0)
             {
-                OnSelectedEnemy?.Invoke(enemy);
+                return;
+            }
+
+            var enemies = _level.LivingEnemies;
+            if (enemies.Count == 0)
+            {
+                return;
+            }
+            
+            var firstPart = _parts[0];
+
+            IEnemyController? selectedEnemy = null;
+            var minDistance = Mathf.Infinity;
+            foreach (var enemy in enemies)
+            {
+                var distance = Vector3.Distance(enemy.Target.position, firstPart.Position);
+
+                if (distance > _maximumAttackDistance)
+                {
+                    continue;
+                }
+                
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    selectedEnemy = enemy;
+                }
+            }
+
+            if (selectedEnemy != null)
+            {
+                if (_selectedEnemy != null && Equals(_selectedEnemy, selectedEnemy))
+                {
+                    return;
+                }
+
+                _selectedEnemy = selectedEnemy;
+                OnSelectedEnemy?.Invoke(selectedEnemy);
             }
         }
 
@@ -110,7 +152,13 @@ namespace Snake
                 _snakePartConfig.Acceleration);
 
             var part = _snakePartFactory.Create(data, this, this);
+            part.OnDied += OnDiedPart;
             _parts.Add(part);
+
+            if (_selectedEnemy != null)
+            {
+                part.ChooseEnemy(_selectedEnemy);
+            }
 
             if (_weapons.SelectedWeapon != null)
             {
@@ -135,6 +183,37 @@ namespace Snake
             foreach (var part in _parts)
             {
                 part.ChooseWeapon(weaponController.Clone());
+            }
+        }
+
+        private void OnDiedPart()
+        {
+            var startDie = false;
+            for (var i = 0; i < _parts.Count; i++)
+            {
+                if (startDie)
+                {
+                    _parts[i].ToDieWithoutNotification();
+                    _parts.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+                
+                var part = _parts[i];
+                if (part.IsDied)
+                {
+                    _parts.RemoveAt(i);
+                    startDie = true;
+                    i--;
+                }
+            }
+        }
+
+        private void OnDestroy()
+        {
+            foreach (var part in _parts)
+            {
+                part.OnDied -= OnDiedPart;
             }
         }
     }

@@ -12,7 +12,8 @@ public class GameContext
     public WeaponConfig WeaponConfig { get; private set; } = null!;
     public ProjectileConfig ProjectileConfig { get; private set; } = null!;
     public TestLevel? TestLevel { get; private set; }
-    public Transform ProjectileParent { get; private set; }
+    public Transform ProjectileParent { get; private set; } = null!;
+    public ZombiesConfig ZombiesConfig { get; private set; } = null!;
     
     public GameContext(Camera camera)
     {
@@ -52,6 +53,12 @@ public class GameContext
     public GameContext AddProjectileParent(Transform projectileParent)
     {
         ProjectileParent = projectileParent;
+        return this;
+    }
+
+    public GameContext AddZombieConfig(ZombiesConfig zombiesConfig)
+    {
+        ZombiesConfig = zombiesConfig;
         return this;
     }
 }

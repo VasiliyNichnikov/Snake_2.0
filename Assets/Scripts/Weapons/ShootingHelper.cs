@@ -1,5 +1,8 @@
 ﻿#nullable enable
+using Enemies;
+using Entities;
 using Projectiles;
+using Snake;
 
 namespace Weapons
 {
@@ -13,8 +16,18 @@ namespace Weapons
             projectile.Init(controller);
             projectile.ToRun(collider =>
             {
-                // TODO: доделать
-                return collider != null;
+                if (collider == null || collider.gameObject == null)
+                {
+                    return false;
+                }
+
+                if (collider.gameObject.TryGetComponent<IEnemyController>(out var component))
+                {
+                    ((IEntityHealth)component).TakeDamage(projectile.Damage);
+                    return true;
+                }
+
+                return collider.transform.GetComponent<ISnakePartController>() == null;
             });
         }
     }

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e051eb805f84789859b5d6c1fbadb71, type: 3}
+  m_Name: ZombieConfig
+  m_EditorClassIdentifier: 
+  _zombies:
+  - Comment: "\u041E\u0431\u044B\u0447\u043D\u044B\u0439 \u0437\u043E\u0431\u0438"
+    MaxHealth: 10
+    Damage: 1
+    Recharge: 2
+    MinimumDistanceToAttackPlayer: 3
+    PlayerLayerMask:
+      serializedVersion: 2
+      m_Bits: 64
+    AttackAnimationTime: 1
+    Speed: 6
+    AngularSpeed: 360
+    StoppingDistance: 1.5
+    Acceleration: 200
+    RecommendedDistanceToPlayer: 3

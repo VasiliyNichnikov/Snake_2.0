@@ -1,27 +1,24 @@
 ﻿#nullable enable
 using UnityEngine;
-using Weapons;
 
-namespace Snake
+namespace Enemies
 {
-    public class SnakeAnimatorController : IWeaponAnimator
+    public class EnemyAnimator
     {
-        private static readonly int StaticB = Animator.StringToHash("Static_b");
-        private static readonly int StaticF = Animator.StringToHash("Speed_f");
-        private static readonly int WeaponType = Animator.StringToHash("WeaponType_int");
-        private static readonly int SingleShoot = Animator.StringToHash("Shoot_b");
-        private static readonly int Death = Animator.StringToHash("Death_b"); 
+        private const int EmptyHands = 0;
+        private const int Knife = 12;
         
         private readonly Animator _animator;
 
-        public SnakeAnimatorController(Animator animator)
+        private static readonly int Death = Animator.StringToHash("Death_b"); 
+        
+        private static readonly int StaticB = Animator.StringToHash("Static_b");
+        private static readonly int StaticF = Animator.StringToHash("Speed_f");
+        private static readonly int WeaponType = Animator.StringToHash("WeaponType_int");
+        
+        public EnemyAnimator(Animator animator)
         {
             _animator = animator;
-        }
-
-        public void PlaySingleShoot()
-        {
-            _animator.SetBool(SingleShoot, true);
         }
 
         public void Idle()
@@ -36,15 +33,19 @@ namespace Snake
             _animator.SetFloat(StaticF, speed);
         }
 
+        public void StartMeleeAttack()
+        {
+            _animator.SetInteger(WeaponType, Knife);
+        }
+
+        public void EndMeleeAttack()
+        {
+            _animator.SetInteger(WeaponType, EmptyHands);
+        }
+        
         public void Die()
         {
             _animator.SetBool(Death, true);
-        }
-
-        public void SetWeapon(WeaponType? weapon)
-        {
-            var weaponId = weapon == null ? 0 : (int)weapon;
-            _animator.SetInteger(WeaponType, weaponId);
         }
     }
 }
